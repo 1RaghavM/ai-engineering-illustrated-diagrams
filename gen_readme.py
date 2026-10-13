@@ -5,13 +5,24 @@ ISSUES = [
  ("002","model-context-protocol","How the Model Context Protocol (MCP) Works","https://ragmehta.substack.com/p/how-the-model-context-protocol-mcp"),
  ("003","llm-inference-serving","How LLM Inference Serving Works: KV Cache, PagedAttention and Continuous Batching","https://ragmehta.substack.com/p/how-llm-inference-serving-works-kv"),
  ("004","computer-use-agents","How Computer-Use Agents Work","https://ragmehta.substack.com/p/how-computer-use-agents-work"),
- ("005","agent-harness","Anatomy of an Agent Harness: Loop, Tools, Memory and Subagents","https://ragmehta.substack.com/p/anatomy-of-an-agent-harness-loop-tools-memory-and-subagents"),
+ ("005","agent-harness","Anatomy of an Agent Harness: Loop, Tools, Memory and Subagents","https://ragmehta.substack.com/p/anatomy-of-an-agent-harness-loop"),
+ ("006","tokenizers","Why Can't LLMs Count the R's in \"Strawberry\"? How Tokenizers Work","https://ragmehta.substack.com/p/why-cant-llms-count-the-rs-in-strawberry"),
 ]
 man = open(os.path.join(src,"redraw-manifest.md")).read()
 caps = {}
+
+EXTRA = {
+ ("006","text-to-tokens"): ("From raw text to token IDs", "From raw text to token IDs: pre-split, apply BPE merges, look up IDs, then embed."),
+ ("006","bpe-training"): ("How BPE learns its vocabulary", "BPE training: count adjacent pairs, merge the most frequent, repeat until the vocabulary is full."),
+ ("006","strawberry"): ("Why strawberry hides its r's", "The model sees a leading-space strawberry as one ID with no letters inside; spelling it out or calling code exposes the letters."),
+ ("006","token-tax"): ("The token tax across languages and numbers", "The token tax: the same sentence costs more tokens in some languages, and numbers split into left-aligned chunks."),
+ ("006","table-gotchas"): ("Tokenizer gotchas and fixes", "Common tokenizer gotchas, their causes and practical fixes."),
+}
+
 for m in re.finditer(r"issue-(\d{3})/([\w-]+)-final\.png`\. Replaces `[^`]+` \(old alt/caption: \"([^\"]+)\"\)\. New caption: \*([^*]+)\*", man):
     n, f, title, cap = m.groups()
     caps[(n, re.sub(r"^fig\d+-","",f))] = (title, cap)
+caps.update(EXTRA)
 def anchor(t): return re.sub(r"[^a-z0-9 -]","",t.lower()).replace(" ","-")
 out = ["# AI Engineering Illustrated: Diagrams","",
 "**Visual explanations of how modern AI systems actually work: sandboxes, MCP, inference serving, agents and more.**","",

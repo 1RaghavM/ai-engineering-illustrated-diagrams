@@ -13,6 +13,7 @@ These are the diagrams from [AI Engineering Illustrated](https://ragmehta.substa
 - [003 · How LLM Inference Serving Works: KV Cache, PagedAttention and Continuous Batching](#003-how-llm-inference-serving-works-kv-cache-pagedattention-and-continuous-batching)
 - [004 · How Computer-Use Agents Work](#004-how-computer-use-agents-work)
 - [005 · Anatomy of an Agent Harness: Loop, Tools, Memory and Subagents](#005-anatomy-of-an-agent-harness-loop-tools-memory-and-subagents)
+- [006 · Why Can't LLMs Count the R's in "Strawberry"? How Tokenizers Work](#006-why-cant-llms-count-the-rs-in-strawberry-how-tokenizers-work)
 
 ## 001 How Code Sandboxes for AI Agents Work
 
@@ -202,7 +203,7 @@ Five layers of defense for computer-use agents.
 
 Agent = Model + Harness: the six subsystems around the model.
 
-📖 [Read the full deep dive →](https://ragmehta.substack.com/p/anatomy-of-an-agent-harness-loop-tools-memory-and-subagents)
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/anatomy-of-an-agent-harness-loop)
 
 ### The agent loop: model asks, harness acts
 
@@ -210,7 +211,7 @@ Agent = Model + Harness: the six subsystems around the model.
 
 The agent loop: the model asks, the harness checks and acts, until end_turn.
 
-📖 [Read the full deep dive →](https://ragmehta.substack.com/p/anatomy-of-an-agent-harness-loop-tools-memory-and-subagents)
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/anatomy-of-an-agent-harness-loop)
 
 ### How a harness assembles context each turn
 
@@ -218,7 +219,7 @@ The agent loop: the model asks, the harness checks and acts, until end_turn.
 
 What goes into each model call, and what the harness does as context grows.
 
-📖 [Read the full deep dive →](https://ragmehta.substack.com/p/anatomy-of-an-agent-harness-loop-tools-memory-and-subagents)
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/anatomy-of-an-agent-harness-loop)
 
 ### Subagent patterns: handoffs vs agents-as-tools
 
@@ -226,7 +227,7 @@ What goes into each model call, and what the harness does as context grows.
 
 Agents-as-tools vs handoffs: who writes the final reply.
 
-📖 [Read the full deep dive →](https://ragmehta.substack.com/p/anatomy-of-an-agent-harness-loop-tools-memory-and-subagents)
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/anatomy-of-an-agent-harness-loop)
 
 ### Harness design trade-offs
 
@@ -234,7 +235,50 @@ Agents-as-tools vs handoffs: who writes the final reply.
 
 Harness design trade-offs: what to start with and what to add when needed.
 
-📖 [Read the full deep dive →](https://ragmehta.substack.com/p/anatomy-of-an-agent-harness-loop-tools-memory-and-subagents)
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/anatomy-of-an-agent-harness-loop)
+
+
+## 006 Why Can't LLMs Count the R's in "Strawberry"? How Tokenizers Work
+
+### From raw text to token IDs
+
+<p align="center"><img src="images/tokenizers/text-to-tokens.png" alt="From raw text to token IDs" width="720"></p>
+
+From raw text to token IDs: pre-split, apply BPE merges, look up IDs, then embed.
+
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/why-cant-llms-count-the-rs-in-strawberry)
+
+### How BPE learns its vocabulary
+
+<p align="center"><img src="images/tokenizers/bpe-training.png" alt="How BPE learns its vocabulary" width="720"></p>
+
+BPE training: count adjacent pairs, merge the most frequent, repeat until the vocabulary is full.
+
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/why-cant-llms-count-the-rs-in-strawberry)
+
+### Why strawberry hides its r's
+
+<p align="center"><img src="images/tokenizers/strawberry.png" alt="Why strawberry hides its r's" width="720"></p>
+
+The model sees a leading-space strawberry as one ID with no letters inside; spelling it out or calling code exposes the letters.
+
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/why-cant-llms-count-the-rs-in-strawberry)
+
+### The token tax across languages and numbers
+
+<p align="center"><img src="images/tokenizers/token-tax.png" alt="The token tax across languages and numbers" width="720"></p>
+
+The token tax: the same sentence costs more tokens in some languages, and numbers split into left-aligned chunks.
+
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/why-cant-llms-count-the-rs-in-strawberry)
+
+### Tokenizer gotchas and fixes
+
+<p align="center"><img src="images/tokenizers/table-gotchas.png" alt="Tokenizer gotchas and fixes" width="720"></p>
+
+Common tokenizer gotchas, their causes and practical fixes.
+
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/why-cant-llms-count-the-rs-in-strawberry)
 
 ## License
 
