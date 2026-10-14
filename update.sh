@@ -4,7 +4,7 @@
 set -euo pipefail
 SRC="${1:-/workspace/newsletter}"
 cd "$(dirname "$0")"
-declare -A SLUG=( [001]=code-sandboxes [002]=model-context-protocol [003]=llm-inference-serving [004]=computer-use-agents [005]=agent-harness )
+declare -A SLUG=( [001]=code-sandboxes [002]=model-context-protocol [003]=llm-inference-serving [004]=computer-use-agents [005]=agent-harness [006]=tokenizers [007]=cursor-multi-agent )
 for d in "$SRC"/issue-*/; do
   n=$(basename "$d"); n=${n#issue-}
   slug=${SLUG[$n]:-issue-$n}   # add new issues to SLUG above

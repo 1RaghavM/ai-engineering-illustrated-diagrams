@@ -14,6 +14,7 @@ These are the diagrams from [AI Engineering Illustrated](https://ragmehta.substa
 - [004 · How Computer-Use Agents Work](#004-how-computer-use-agents-work)
 - [005 · Anatomy of an Agent Harness: Loop, Tools, Memory and Subagents](#005-anatomy-of-an-agent-harness-loop-tools-memory-and-subagents)
 - [006 · Why Can't LLMs Count the R's in "Strawberry"? How Tokenizers Work](#006-why-cant-llms-count-the-rs-in-strawberry-how-tokenizers-work)
+- [007 · How Cursor Got Thousands of AI Agents to Build One Browser](#007-how-cursor-got-thousands-of-ai-agents-to-build-one-browser)
 
 ## 001 How Code Sandboxes for AI Agents Work
 
@@ -279,6 +280,49 @@ The token tax: the same sentence costs more tokens in some languages, and number
 Common tokenizer gotchas, their causes and practical fixes.
 
 📖 [Read the full deep dive →](https://ragmehta.substack.com/p/why-cant-llms-count-the-rs-in-strawberry)
+
+
+## 007 How Cursor Got Thousands of AI Agents to Build One Browser
+
+### Four harness designs Cursor tried
+
+<p align="center"><img src="images/cursor-multi-agent/four-designs.png" alt="Four harness designs Cursor tried" width="720"></p>
+
+Cursor tried four harness designs. Flat peers with a lock file, a planner-executor-judge pipeline and a single continuous executor all stalled. A tree of planners, workers and handoffs scaled to about 1,000 commits an hour.
+
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/how-cursor-got-thousands-of-ai-agents)
+
+### Tree of planners, workers and handoffs
+
+<p align="center"><img src="images/cursor-multi-agent/agent-tree.png" alt="Tree of planners, workers and handoffs" width="720"></p>
+
+The final design: a root planner that writes no code, recursive subplanners that each own a slice, and workers on their own repo copies that push to one shared branch and send handoffs back up.
+
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/how-cursor-got-thousands-of-ai-agents)
+
+### Throughput over perfection
+
+<p align="center"><img src="images/cursor-multi-agent/throughput.png" alt="Throughput over perfection" width="720"></p>
+
+Requiring every commit to be green serialized the whole system. Accepting a small, stable error rate plus a final fix-up pass kept hundreds of agents moving. (The error chart is illustrative.)
+
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/how-cursor-got-thousands-of-ai-agents)
+
+### One machine became the bottleneck
+
+<p align="center"><img src="images/cursor-multi-agent/one-machine.png" alt="One machine became the bottleneck" width="720"></p>
+
+Each run had one large VM with about 300 agents. Once agent RAM was capped, disk I/O from builds and shared git and Cargo locks became the bottlenecks. Specs, screenshots and the Rust compiler kept agents on track.
+
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/how-cursor-got-thousands-of-ai-agents)
+
+### How five multi-agent systems coordinate
+
+<p align="center"><img src="images/cursor-multi-agent/table-designs.png" alt="How five multi-agent systems coordinate" width="720"></p>
+
+How five multi-agent systems from Cursor and Anthropic coordinate, how big they got and how they check work.
+
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/how-cursor-got-thousands-of-ai-agents)
 
 ## License
 

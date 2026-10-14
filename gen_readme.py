@@ -7,6 +7,7 @@ ISSUES = [
  ("004","computer-use-agents","How Computer-Use Agents Work","https://ragmehta.substack.com/p/how-computer-use-agents-work"),
  ("005","agent-harness","Anatomy of an Agent Harness: Loop, Tools, Memory and Subagents","https://ragmehta.substack.com/p/anatomy-of-an-agent-harness-loop"),
  ("006","tokenizers","Why Can't LLMs Count the R's in \"Strawberry\"? How Tokenizers Work","https://ragmehta.substack.com/p/why-cant-llms-count-the-rs-in-strawberry"),
+ ("007","cursor-multi-agent","How Cursor Got Thousands of AI Agents to Build One Browser","https://ragmehta.substack.com/p/how-cursor-got-thousands-of-ai-agents"),
 ]
 man = open(os.path.join(src,"redraw-manifest.md")).read()
 caps = {}
@@ -17,6 +18,11 @@ EXTRA = {
  ("006","strawberry"): ("Why strawberry hides its r's", "The model sees a leading-space strawberry as one ID with no letters inside; spelling it out or calling code exposes the letters."),
  ("006","token-tax"): ("The token tax across languages and numbers", "The token tax: the same sentence costs more tokens in some languages, and numbers split into left-aligned chunks."),
  ("006","table-gotchas"): ("Tokenizer gotchas and fixes", "Common tokenizer gotchas, their causes and practical fixes."),
+ ("007","four-designs"): ("Four harness designs Cursor tried", "Cursor tried four harness designs. Flat peers with a lock file, a planner-executor-judge pipeline and a single continuous executor all stalled. A tree of planners, workers and handoffs scaled to about 1,000 commits an hour."),
+ ("007","agent-tree"): ("Tree of planners, workers and handoffs", "The final design: a root planner that writes no code, recursive subplanners that each own a slice, and workers on their own repo copies that push to one shared branch and send handoffs back up."),
+ ("007","throughput"): ("Throughput over perfection", "Requiring every commit to be green serialized the whole system. Accepting a small, stable error rate plus a final fix-up pass kept hundreds of agents moving. (The error chart is illustrative.)"),
+ ("007","one-machine"): ("One machine became the bottleneck", "Each run had one large VM with about 300 agents. Once agent RAM was capped, disk I/O from builds and shared git and Cargo locks became the bottlenecks. Specs, screenshots and the Rust compiler kept agents on track."),
+ ("007","table-designs"): ("How five multi-agent systems coordinate", "How five multi-agent systems from Cursor and Anthropic coordinate, how big they got and how they check work."),
 }
 
 for m in re.finditer(r"issue-(\d{3})/([\w-]+)-final\.png`\. Replaces `[^`]+` \(old alt/caption: \"([^\"]+)\"\)\. New caption: \*([^*]+)\*", man):
