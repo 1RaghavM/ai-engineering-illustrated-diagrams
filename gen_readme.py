@@ -8,6 +8,7 @@ ISSUES = [
  ("005","agent-harness","Anatomy of an Agent Harness: Loop, Tools, Memory and Subagents","https://ragmehta.substack.com/p/anatomy-of-an-agent-harness-loop"),
  ("006","tokenizers","Why Can't LLMs Count the R's in \"Strawberry\"? How Tokenizers Work","https://ragmehta.substack.com/p/why-cant-llms-count-the-rs-in-strawberry"),
  ("007","cursor-multi-agent","How Cursor Got Thousands of AI Agents to Build One Browser","https://ragmehta.substack.com/p/how-cursor-got-thousands-of-ai-agents"),
+ ("008","vector-indexes","HNSW vs IVF vs PQ: How Vector Indexes Trade Memory, Speed and Recall","https://ragmehta.substack.com/p/hnsw-vs-ivf-vs-pq-how-vector-indexes"),
 ]
 man = open(os.path.join(src,"redraw-manifest.md")).read()
 caps = {}
@@ -23,6 +24,12 @@ EXTRA = {
  ("007","throughput"): ("Throughput over perfection", "Requiring every commit to be green serialized the whole system. Accepting a small, stable error rate plus a final fix-up pass kept hundreds of agents moving. (The error chart is illustrative.)"),
  ("007","one-machine"): ("One machine became the bottleneck", "Each run had one large VM with about 300 agents. Once agent RAM was capped, disk I/O from builds and shared git and Cargo locks became the bottlenecks. Specs, screenshots and the Rust compiler kept agents on track."),
  ("007","table-designs"): ("How five multi-agent systems coordinate", "How five multi-agent systems from Cursor and Anthropic coordinate, how big they got and how they check work."),
+ ("008","three-families"): ("Three families of vector indexes", "Three ways to avoid brute-force search: navigate a graph (HNSW), narrow the search to a few partitions (IVF), or shrink every vector (PQ). Real indexes usually combine two of them."),
+ ("008","hnsw"): ("How HNSW search works", "HNSW enters at a sparse top layer, hops greedily toward the query, drops a layer at a time, and widens its candidate list (ef_search) at the bottom layer, which holds every vector."),
+ ("008","ivf"): ("How IVF partitions the space", "IVF uses k-means to split the space into cells and scans only the nprobe nearest lists. A true neighbor just across a cell boundary is missed unless you probe more cells."),
+ ("008","pq"): ("How product quantization compresses vectors", "Product quantization splits a 768-dimension vector into 96 chunks and stores one byte per chunk: 3,072 bytes become 96. Distances become table lookups, so top hits are reranked with full vectors."),
+ ("008","table-tradeoffs"): ("Vector index trade-offs", "How flat, HNSW, IVF-Flat, IVF-PQ/RaBitQ and DiskANN compare on memory, build time, query speed and updates."),
+ ("008","which-index"): ("Which vector index to pick", "A quick decision guide: flat for small jobs, HNSW when RAM is plentiful, IVF with compression or DiskANN when it isn't. On Postgres, pgvector HNSW is the stable default; PRISM is alpha."),
 }
 
 for m in re.finditer(r"issue-(\d{3})/([\w-]+)-final\.png`\. Replaces `[^`]+` \(old alt/caption: \"([^\"]+)\"\)\. New caption: \*([^*]+)\*", man):

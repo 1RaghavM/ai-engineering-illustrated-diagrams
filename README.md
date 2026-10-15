@@ -15,6 +15,7 @@ These are the diagrams from [AI Engineering Illustrated](https://ragmehta.substa
 - [005 · Anatomy of an Agent Harness: Loop, Tools, Memory and Subagents](#005-anatomy-of-an-agent-harness-loop-tools-memory-and-subagents)
 - [006 · Why Can't LLMs Count the R's in "Strawberry"? How Tokenizers Work](#006-why-cant-llms-count-the-rs-in-strawberry-how-tokenizers-work)
 - [007 · How Cursor Got Thousands of AI Agents to Build One Browser](#007-how-cursor-got-thousands-of-ai-agents-to-build-one-browser)
+- [008 · HNSW vs IVF vs PQ: How Vector Indexes Trade Memory, Speed and Recall](#008-hnsw-vs-ivf-vs-pq-how-vector-indexes-trade-memory-speed-and-recall)
 
 ## 001 How Code Sandboxes for AI Agents Work
 
@@ -323,6 +324,57 @@ Each run had one large VM with about 300 agents. Once agent RAM was capped, disk
 How five multi-agent systems from Cursor and Anthropic coordinate, how big they got and how they check work.
 
 📖 [Read the full deep dive →](https://ragmehta.substack.com/p/how-cursor-got-thousands-of-ai-agents)
+
+## 008 HNSW vs IVF vs PQ: How Vector Indexes Trade Memory, Speed and Recall
+
+### Three families of vector indexes
+
+<p align="center"><img src="images/vector-indexes/three-families.png" alt="Three families of vector indexes" width="720"></p>
+
+Three ways to avoid brute-force search: navigate a graph (HNSW), narrow the search to a few partitions (IVF), or shrink every vector (PQ). Real indexes usually combine two of them.
+
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/hnsw-vs-ivf-vs-pq-how-vector-indexes)
+
+### How HNSW search works
+
+<p align="center"><img src="images/vector-indexes/hnsw.png" alt="How HNSW search works" width="720"></p>
+
+HNSW enters at a sparse top layer, hops greedily toward the query, drops a layer at a time, and widens its candidate list (ef_search) at the bottom layer, which holds every vector.
+
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/hnsw-vs-ivf-vs-pq-how-vector-indexes)
+
+### How IVF partitions the space
+
+<p align="center"><img src="images/vector-indexes/ivf.png" alt="How IVF partitions the space" width="720"></p>
+
+IVF uses k-means to split the space into cells and scans only the nprobe nearest lists. A true neighbor just across a cell boundary is missed unless you probe more cells.
+
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/hnsw-vs-ivf-vs-pq-how-vector-indexes)
+
+### How product quantization compresses vectors
+
+<p align="center"><img src="images/vector-indexes/pq.png" alt="How product quantization compresses vectors" width="720"></p>
+
+Product quantization splits a 768-dimension vector into 96 chunks and stores one byte per chunk: 3,072 bytes become 96. Distances become table lookups, so top hits are reranked with full vectors.
+
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/hnsw-vs-ivf-vs-pq-how-vector-indexes)
+
+### Vector index trade-offs
+
+<p align="center"><img src="images/vector-indexes/table-tradeoffs.png" alt="Vector index trade-offs" width="720"></p>
+
+How flat, HNSW, IVF-Flat, IVF-PQ/RaBitQ and DiskANN compare on memory, build time, query speed and updates.
+
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/hnsw-vs-ivf-vs-pq-how-vector-indexes)
+
+### Which vector index to pick
+
+<p align="center"><img src="images/vector-indexes/which-index.png" alt="Which vector index to pick" width="720"></p>
+
+A quick decision guide: flat for small jobs, HNSW when RAM is plentiful, IVF with compression or DiskANN when it isn't. On Postgres, pgvector HNSW is the stable default; PRISM is alpha.
+
+📖 [Read the full deep dive →](https://ragmehta.substack.com/p/hnsw-vs-ivf-vs-pq-how-vector-indexes)
+
 
 ## License
 
